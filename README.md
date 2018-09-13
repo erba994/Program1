@@ -1,2 +1,2 @@
 # Program1
-Corso Python
+задания в папке (es2/venv/include), пуширую прямо от PyCharm.
