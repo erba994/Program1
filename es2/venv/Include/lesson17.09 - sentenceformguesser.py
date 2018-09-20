@@ -1,26 +1,25 @@
 while True:
-    s = input('напишите предложение: ')
-    s = s.split()
+    s = input('напишите предложение: ').split()
     for word in s:
         word = word.strip(".,!?:;-_\"+").lower()
         if len(word) >= 3:
-            if word.endswith("и" or "ы"):
+            if word.endswith(("и", "ы")):
                 print(word, " - существительное, мужской или женский род, множественное число")
-            elif word.endswith("а" or "я"):
+            elif word.endswith(("а", "я")):
                 print(word, " - существительное, женский род и единственное число или средний род и множественное число")
-            elif word.endswith("о" or "е"):
+            elif word.endswith(("о", "е")):
                 print(word, " - существительное, средний род и единственное число или наречие")
             elif word.endswith("ность"):
                 print(word, " - существительное, женский род и единственное число")
-            elif word.endswith("ать" or "ить"):
+            elif word.endswith(("ать", "ить")):
                 print(word, " - глагол")
-            elif word.endswith("ый" or "ий" or "ой"):
+            elif word.endswith(("ый", "ий", "ой")):
                 print(word, " - прилагательное, мужской род и единственное число")
-            elif word.endswith("ая" or "яя"):
+            elif word.endswith(("ая", "яя")):
                 print(word, " - прилагательное, женский род и единственное число")
-            elif word.endswith("ое" or "ее"):
+            elif word.endswith(("ое", "ее")):
                 print(word, " - прилагательное, средний род и единственное число")
-            elif word.endswith("ые" or "ие"):
+            elif word.endswith(("ые", "ие")):
                 print(word, " - прилагательное, множественное число")
             elif word.endswith("ь"):
                 print(word, " - существительное, мужской или женский род, единственное число")
