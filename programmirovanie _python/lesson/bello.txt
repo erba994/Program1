@@ -1,0 +1,3 @@
+The method readlines() reads until EOF using readline() and returns a list containing the lines. If the optional sizehint argument is present, instead of reading up to EOF, whole lines totalling approximately sizehint bytes (possibly after rounding up to an internal buffer size) are read.
+
+An empty string is returned only when EOF is encountered immediately.
