@@ -1,21 +1,23 @@
-#читать файл, вводят в нишнем регистре, разделит слова, выбирает снаки препинаниа печатать пословно
+#читать файл, вводят в нижний регистр, разделяет слова, убирает снаки препинаниа, печатает пословно
 
 def open_file(filename):
     f = open(filename, "r", encoding="utf-8")
     s = f.readlines()
+    s = "".join(s)
     f.close()
     return s
 
 def punctuation_clean(s):
+    l = []
     for word in s:
-        word.strip(".,;:-_!?")
-        return s
+        l.append(word.strip(".(),;:-_!?"))
+    return l
 
 def word_clean(s):
-    s = s.split("")
-    return s
+    f = s.split()
+    return f
 
 f = open_file("bello.txt")
-f = punctuation_clean(f)
 f = word_clean(f)
-print(f)
+f = punctuation_clean(f)
+print(" ".join(f))
