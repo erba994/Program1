@@ -111,11 +111,11 @@ def question():
 def negative():
     v = verb()
     if v == "pensa":
-        sentence = (article_s(noun_s()) + " " + v + " " + prep(article_p(noun_p(noun_s()))) + " " + adverb() + ".")
+        sentence = (article_s(noun_s()) + " " + "non" + " " + v + " " + prep(article_p(noun_p(noun_s()))) + " " + adverb() + ".")
     elif v == "corre":
-        sentence = (article_s(noun_s()) + " " + v + " " + "verso" + " " + article_p(noun_p(noun_s())) + " " + adverb() + ".")
+        sentence = (article_s(noun_s()) + " " + "non" + " " + v + " " + "verso" + " " + article_p(noun_p(noun_s())) + " " + adverb() + ".")
     else:
-        sentence = (article_s(noun_s()) + " " + v + " " + article_p(noun_p(noun_s())) + " " + adverb() + ".")
+        sentence = (article_s(noun_s()) + " " + "non" + " " + v + " " + article_p(noun_p(noun_s())) + " " + adverb() + ".")
     return sentence
 
 
