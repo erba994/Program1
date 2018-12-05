@@ -1,4 +1,4 @@
-#start from address, work text and obtain links to other webpages, repeat the procedure for every accessed page
+# start from address, work text and obtain links to other webpages, repeat the procedure for every accessed page
 
 import re
 import urllib.request
