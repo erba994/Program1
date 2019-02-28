@@ -70,21 +70,23 @@ def tag_extraction(tree):
     #  TITLE catching
     title = tree.xpath('.//h1[@class="title"]')[0].text_content()
     title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
-    titlepath = re.sub("([/?!*\"><|\\\\])", "", title)
+    titlepath = re.sub("([/?!*:\"><|\\\\])", "", title)
+    #  SOURCE catching
+    try:
+        source = tree.xpath('.//div[@class="b-document__authors"]/ul/li[@class="b-document__authority"]/a')[
+            0].text_content()
+    except:
+        source = ""
     #  AUTHOR catching
     try:
         authors = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')
         authorslist = []
         for singauthor in authors:
             authorslist.append(singauthor.text_content())
+        authorslist = [x for x in authorslist if x != source]
         author = " ".join(authorslist)
     except:
         author = ""
-    #  SOURCE catching
-    try:
-        source = tree.xpath('.//div[@class="b-document__authors"]/ul/li[@class="b-document__authority"]/a')[0].text_content()
-    except:
-        source = ""
 
     return title, titlepath, author, source
 
@@ -153,4 +155,4 @@ if __name__ == "__main__":
                         text_writer(text, path)
                         csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
                         stemmedtext = my_stemmer(text)
-                        text_writer(json.dumps(stemmedtext), stemmedpath)
+                        text_writer(json.dumps(stemmedtext, ensure_ascii=False), stemmedpath)
