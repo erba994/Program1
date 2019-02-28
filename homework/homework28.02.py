@@ -46,6 +46,8 @@ from datetime import datetime
 from string import punctuation
 import os
 from pymystem3 import Mystem
+import re
+import json
 
 def access_site(url):
     doc = urllib.request.urlopen(url)
@@ -66,10 +68,10 @@ def tag_extraction(tree):
     #  TITLE catching
     try:
         title = tree.xpath('.//h1[@class="title"]')[0].text_content()
-        title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
     except:
         title = tree.xpath('.//div[@class="b-news-item__title b-news-item__title_one"]/h1')[0].text_content()
-        title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
+    title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
+    title = re.sub("/", "-", title)
     #  AUTHOR catching
     try:
         author = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')[0].text_content()
@@ -109,7 +111,7 @@ def text_extractor(tree):
 
 def csv_updater(file, path, title, date, author, source, url, wordcount):
     with open(file, "a", encoding="utf-8") as w:
-        w.write(path + ", " + author + ", " + date + ", " + source + ", " + title + ", " + url + ", " + str(wordcount) + "\n")
+        w.write(path + "\t" + author + "\t" + date + "\t" + source + "\t" + title + "\t" + url + "\t" + str(wordcount) + "\n")
         w.close()
 
 def text_writer(text, path):
@@ -159,4 +161,4 @@ if __name__ == "__main__":
                         text_writer(text, path)
                         csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
                         stemmedtext = my_stemmer(text)
-                        print(stemmedtext, file=open(stemmedpath, "w+", encoding="utf-8"))
+                        text_writer(json.dumps(stemmedtext), stemmedpath)
