@@ -60,47 +60,38 @@ def link_getter(tree):
     linkslist = []
     links = tree.xpath('.//div[@class="b-article__title"]/a')
     for link in links:
-        linkslist.append(link.attrib["href"])
+        newurl = link.attrib["href"]
+        if re.search("articles", newurl) is not None:
+            linkslist.append(newurl)
     return linkslist
 
 
 def tag_extraction(tree):
     #  TITLE catching
-    try:
-        title = tree.xpath('.//h1[@class="title"]')[0].text_content()
-    except:
-        title = tree.xpath('.//div[@class="b-news-item__title b-news-item__title_one"]/h1')[0].text_content()
+    title = tree.xpath('.//h1[@class="title"]')[0].text_content()
     title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
     title = re.sub("/", "-", title)
     #  AUTHOR catching
     try:
-        author = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')[0].text_content()
+        authors = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')
+        authorslist = []
+        for singauthor in authors:
+            authorslist.append(singauthor.text_content())
+        author = " ".join(authorslist)
     except:
-        try:
-            author = tree.xpath('.//a[@class="link b-document__authors decorate__border--right"]')[
-                0].text_content()
-        except:
-            author = ""
+        author = ""
     #  SOURCE catching
     try:
         source = tree.xpath('.//div[@class="b-document__authors"]/ul/li[@class="b-document__authority"]/a')[0].text_content()
     except:
-        try:
-            source = tree.xpath('.//a[@class="link b-document__authority decorate__border--right"]')[
-                0].text_content()
-        except:
-            source = ""
+        source = ""
 
     return title, author, source
 
 
 def text_extractor(tree):
     articletext = []
-    try:
-        texts = tree.xpath('.//div[@class="b-document__body b-social__layout-mutation"]/p')
-    except:
-        node = tree.xpath('.//div[@class="b-news_wrapper b-news_wrapper-first"]/div/div/article')
-        texts = node[0].xpath('./div/div/p')
+    texts = tree.xpath('.//div[@class="b-document__body b-social__layout-mutation"]/p')
     for text in texts:
         paragraph = text.text_content()
         paragraph = paragraph.rstrip("\n").rstrip().lstrip().lstrip("\n")
@@ -127,14 +118,15 @@ def my_stemmer(text):
 
 if __name__ == "__main__":
     # 1 июля 2015 -- 31 декабря 2018
-    csv = "homework280219/filetable.csv"
-    folderplain = "homework280219/plain_text"
-    folderstem = "homework280219/mystem_text"
-    os.mkdir("homework280219")
+    basefolder = r"D:/homework280219"
+    csv = basefolder + "/filetable.csv"
+    folderplain = basefolder + "/plain_text"
+    folderstem = basefolder + "/mystem_text"
+    os.mkdir(basefolder)
     f = open(csv, "w+")
     f.close()
-    os.mkdir("homework280219/plain_text")
-    os.mkdir("homework280219/mystem_text")
+    os.mkdir(folderplain)
+    os.mkdir(folderstem)
     url = "https://www.vedomosti.ru/archive"
     for year in range(2015, 2018+1):
         os.mkdir(folderplain + "/" + str(year))
@@ -157,7 +149,7 @@ if __name__ == "__main__":
                         title, author, source = tag_extraction(tree)
                         text, wordcount = text_extractor(tree)
                         path = folderplain + "/" + str(year) + "/" + str(month) + "/" + title + ".txt"
-                        stemmedpath = folderplain + "/" + str(year) + "/" + str(month) + "/" + title + ".txt"
+                        stemmedpath = folderstem + "/" + str(year) + "/" + str(month) + "/" + title + ".txt"
                         text_writer(text, path)
                         csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
                         stemmedtext = my_stemmer(text)
