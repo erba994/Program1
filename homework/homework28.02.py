@@ -70,7 +70,7 @@ def tag_extraction(tree):
     #  TITLE catching
     title = tree.xpath('.//h1[@class="title"]')[0].text_content()
     title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
-    title = re.sub("([/?!.])", r"'\1'", title)
+    titlepath = re.sub("([/?!*\"><|\\\\])", "", title)
     #  AUTHOR catching
     try:
         authors = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')
@@ -86,7 +86,7 @@ def tag_extraction(tree):
     except:
         source = ""
 
-    return title, author, source
+    return title, titlepath, author, source
 
 
 def text_extractor(tree):
@@ -146,10 +146,10 @@ if __name__ == "__main__":
                         dayurl = "https://www.vedomosti.ru" + daylink
                         date = str(year) + "/" + str(month) + "/" + str(day)
                         tree = access_site(dayurl)
-                        title, author, source = tag_extraction(tree)
+                        title, titlepath, author, source = tag_extraction(tree)
                         text, wordcount = text_extractor(tree)
-                        path = folderplain + "/" + str(year) + "/" + str(month) + "/" + title + ".txt"
-                        stemmedpath = folderstem + "/" + str(year) + "/" + str(month) + "/" + title + ".txt"
+                        path = folderplain + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
+                        stemmedpath = folderstem + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
                         text_writer(text, path)
                         csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
                         stemmedtext = my_stemmer(text)
