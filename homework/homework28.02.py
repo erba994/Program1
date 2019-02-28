@@ -109,7 +109,7 @@ def text_extractor(tree):
 
 def csv_updater(file, path, title, date, author, source, url, wordcount):
     with open(file, "a", encoding="utf-8") as w:
-        w.write(path + ", " + author + ", " + date + ", "+ source + ", " + title + ", " + url + ", " + wordcount + "\n")
+        w.write(path + ", " + author + ", " + date + ", " + source + ", " + title + ", " + url + ", " + str(wordcount) + "\n")
         w.close()
 
 def text_writer(text, path):
@@ -128,8 +128,7 @@ if __name__ == "__main__":
     csv = "homework280219/filetable.csv"
     folderplain = "homework280219/plain_text"
     folderstem = "homework280219/mystem_text"
-    if not os.path.exists("homework280219"):
-        os.mkdir("homework280219")
+    os.mkdir("homework280219")
     f = open(csv, "w+")
     f.close()
     os.mkdir("homework280219/plain_text")
@@ -160,4 +159,4 @@ if __name__ == "__main__":
                         text_writer(text, path)
                         csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
                         stemmedtext = my_stemmer(text)
-                        text_writer(stemmedtext, stemmedpath)
+                        print(stemmedtext, file=open(stemmedpath, "w+", encoding="utf-8"))
