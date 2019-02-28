@@ -70,7 +70,7 @@ def tag_extraction(tree):
     #  TITLE catching
     title = tree.xpath('.//h1[@class="title"]')[0].text_content()
     title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
-    title = re.sub("/", "-", title)
+    title = re.sub("([/?!.])", r"'\1'", title)
     #  AUTHOR catching
     try:
         authors = tree.xpath('.//div[@class="b-document__authors"]/ul/li/a')
