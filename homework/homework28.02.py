@@ -68,9 +68,13 @@ def link_getter(tree):
 
 def tag_extraction(tree):
     #  TITLE catching
-    title = tree.xpath('.//h1[@class="title"]')[0].text_content()
-    title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
-    titlepath = re.sub("([/?!*:\"><|\\\\])", "", title)
+    try:
+        title = tree.xpath('.//h1[@class="title"]')[0].text_content()
+        title = title.rstrip("\n").rstrip().lstrip().lstrip("\n")
+        titlepath = re.sub("([/?!*:\"><|\\\\])", "", title)
+    except:
+        title = ""
+        titlepath = ""
     #  SOURCE catching
     try:
         source = tree.xpath('.//div[@class="b-document__authors"]/ul/li[@class="b-document__authority"]/a')[
@@ -144,15 +148,21 @@ if __name__ == "__main__":
                     datevalid = False
                 if datevalid is True and datetime(year, month, day) >= datetime(2015, 7, 1):
                     daylinks = link_getter(access_site(url + "/" + str(year) + "/" + str(month) + "/" + str(day)))
+                    daylinks = daylinks[:20]
                     for daylink in daylinks:
-                        dayurl = "https://www.vedomosti.ru" + daylink
-                        date = str(year) + "/" + str(month) + "/" + str(day)
-                        tree = access_site(dayurl)
-                        title, titlepath, author, source = tag_extraction(tree)
-                        text, wordcount = text_extractor(tree)
-                        path = folderplain + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
-                        stemmedpath = folderstem + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
-                        text_writer(text, path)
-                        csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
-                        stemmedtext = my_stemmer(text)
-                        text_writer(json.dumps(stemmedtext, ensure_ascii=False), stemmedpath)
+                        try:
+                            dayurl = "https://www.vedomosti.ru" + daylink
+                            date = str(year) + "/" + str(month) + "/" + str(day)
+                            tree = access_site(dayurl)
+                            title, titlepath, author, source = tag_extraction(tree)
+                            text, wordcount = text_extractor(tree)
+                            if len(title) == 0 or wordcount == 0:
+                                continue
+                            path = folderplain + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
+                            stemmedpath = folderstem + "/" + str(year) + "/" + str(month) + "/" + titlepath + ".txt"
+                            text_writer(text, path)
+                            csv_updater(csv, path, title, date, author, source, dayurl, wordcount)
+                            stemmedtext = my_stemmer(text)
+                            text_writer(json.dumps(stemmedtext, ensure_ascii=False), stemmedpath)
+                        except:
+                            continue
