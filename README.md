@@ -1,2 +1,3 @@
 # Program1
-задания в папке (es2/venv/include), пуширую прямо от PyCharm.
+репозитория курс Питона
+ссылка на корпус homework 28/02/2019 https://drive.google.com/open?id=17rLUzBsD4OuhBNly3aFEHom3sDToCr84
